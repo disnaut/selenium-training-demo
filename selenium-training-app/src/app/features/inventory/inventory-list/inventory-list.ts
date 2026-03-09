@@ -16,6 +16,7 @@ import { InventoryItem } from '../../../shared/models/inventory-item';
 import { MOCK_INVENTORY_ITEMS } from '../../../shared/data/mock-inventory-items';
 import { InventoryDialog } from '../inventory-dialog/inventory-dialog';
 import { InventoryData } from '../../../shared/services/inventory-data';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-inventory-list',
@@ -43,6 +44,7 @@ export class InventoryList {
 
   protected readonly isLoading = signal(true);
   private readonly inventoryService = inject(InventoryData);
+  private readonly router = inject(Router);
 
   protected readonly displayedColumns: string[] = [
     'sku',
@@ -69,6 +71,10 @@ export class InventoryList {
     if (sort) {
       this.dataSource.sort = sort;
     }
+  }
+
+  protected viewItem(item: InventoryItem): void {
+    this.router.navigate(['/inventory', item.id]);
   }
 
   public constructor() {

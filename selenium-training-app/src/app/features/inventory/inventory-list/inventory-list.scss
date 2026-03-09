@@ -81,3 +81,11 @@
   text-align: center;
   padding: 1rem;
 }
+
+.inventory-row {
+  cursor: pointer;
+}
+
+.inventory-row:hover {
+  background: rgba(0, 0, 0, 0.04);
+}

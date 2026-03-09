@@ -182,18 +182,15 @@
                 <button
                   mat-icon-button
                   type="button"
-                  (click)="editItem(item)"
-                  [attr.data-testid]="'inventory-edit-button-' + item.id"
+                  (click)="editItem(item); $event.stopPropagation()"
                   aria-label="Edit inventory item"
                 >
                   <mat-icon>edit</mat-icon>
                 </button>
-
                 <button
                   mat-icon-button
                   type="button"
-                  (click)="deleteItem(item)"
-                  [attr.data-testid]="'inventory-delete-button-' + item.id"
+                  (click)="deleteItem(item); $event.stopPropagation()"
                   aria-label="Delete inventory item"
                 >
                   <mat-icon>delete</mat-icon>
@@ -210,6 +207,8 @@
             <tr
               mat-row
               *matRowDef="let row; columns: displayedColumns"
+              (click)="viewItem(row)"
+              class="inventory-row"
               [attr.data-testid]="'inventory-row-' + row.id"
             ></tr>
 
