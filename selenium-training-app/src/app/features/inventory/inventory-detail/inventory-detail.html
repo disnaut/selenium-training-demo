@@ -1,1 +1,121 @@
-<p>inventory-detail works!</p>
+<div class="inventory-detail-page" data-testid="inventory-detail-page">
+  @if (isLoading()) {
+    <div class="loading-container" data-testid="inventory-detail-loading">
+      <mat-spinner diameter="48"></mat-spinner>
+      <p>Loading inventory item...</p>
+    </div>
+  } @else if (item(); as currentItem) {
+    <div class="detail-header">
+      <button
+        mat-stroked-button
+        routerLink="/inventory"
+        type="button"
+        data-testid="inventory-detail-back-button"
+      >
+        <mat-icon>arrow_back</mat-icon>
+        Back to Inventory
+      </button>
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        (click)="editItem()"
+        data-testid="inventory-detail-edit-button"
+      >
+        <mat-icon>edit</mat-icon>
+        Edit Item
+      </button>
+    </div>
+
+    <mat-card class="detail-card" data-testid="inventory-detail-card">
+      <mat-card-header>
+        <mat-card-title data-testid="inventory-detail-name">
+          {{ currentItem.name }}
+        </mat-card-title>
+
+        <mat-card-subtitle data-testid="inventory-detail-sku">
+          {{ currentItem.sku }}
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="detail-top-row">
+          <mat-chip-set aria-label="Inventory item status">
+            <mat-chip
+              [ngClass]="getStatusClass(currentItem.status)"
+              data-testid="inventory-detail-status-chip"
+            >
+              {{ currentItem.status }}
+            </mat-chip>
+          </mat-chip-set>
+        </div>
+
+        <div class="detail-grid">
+          <div class="detail-row">
+            <span class="label">Category</span>
+            <span data-testid="inventory-detail-category">{{ currentItem.category }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="label">Quantity</span>
+            <span data-testid="inventory-detail-quantity">{{ currentItem.quantity }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="label">Location</span>
+            <span data-testid="inventory-detail-location">{{ currentItem.location }}</span>
+          </div>
+
+          <div class="detail-row">
+            <span class="label">Last Updated</span>
+            <span data-testid="inventory-detail-last-updated">{{ currentItem.lastUpdated }}</span>
+          </div>
+        </div>
+
+        <mat-accordion class="detail-accordion">
+          <mat-expansion-panel data-testid="inventory-detail-notes-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>Inspection Notes</mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <p>
+              Mock detail content for Selenium practice. This panel is here to provide expandable
+              content and another interaction point for tests.
+            </p>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel data-testid="inventory-detail-history-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>Inventory History</mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <p>
+              Item {{ currentItem.sku }} was last updated on {{ currentItem.lastUpdated }} and is
+              currently marked as {{ currentItem.status }}.
+            </p>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </mat-card-content>
+    </mat-card>
+  } @else {
+    <mat-card class="detail-card" data-testid="inventory-detail-not-found">
+      <mat-card-header>
+        <mat-card-title>Item Not Found</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p>The requested inventory item could not be located.</p>
+
+        <button
+          mat-stroked-button
+          routerLink="/inventory"
+          type="button"
+          data-testid="inventory-detail-return-button"
+        >
+          Return to Inventory
+        </button>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

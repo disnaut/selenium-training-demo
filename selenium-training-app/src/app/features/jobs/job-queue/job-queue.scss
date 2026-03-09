@@ -1,3 +1,7 @@
+.job-queue-card {
+  width: 100%;
+}
+
 .actions {
   display: flex;
   flex-wrap: wrap;
@@ -14,4 +18,33 @@
 
 table {
   width: 100%;
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-queued {
+  background-color: #e3f2fd;
+  color: #0d47a1;
+}
+
+.status-running {
+  background-color: #fff3cd;
+  color: #8a6d3b;
+}
+
+.status-completed {
+  background-color: #c8e6c9;
+  color: #1b5e20;
+}
+
+.status-failed {
+  background-color: #ffcdd2;
+  color: #b71c1c;
 }

@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card class="job-queue-card" data-testid="job-queue-page">
   <mat-card-header>
     <mat-card-title data-testid="job-queue-title">Bulk Actions Queue</mat-card-title>
     <mat-card-subtitle> Simulated async jobs for Selenium training </mat-card-subtitle>
@@ -9,6 +9,7 @@
       <button
         mat-raised-button
         color="primary"
+        type="button"
         (click)="startJob('price-update')"
         data-testid="start-price-update-button"
       >
@@ -18,6 +19,7 @@
       <button
         mat-raised-button
         color="accent"
+        type="button"
         (click)="startJob('archive')"
         data-testid="start-archive-button"
       >
@@ -26,13 +28,19 @@
 
       <button
         mat-raised-button
+        type="button"
         (click)="startJob('restock-sync')"
         data-testid="start-restock-sync-button"
       >
         Start Restock Sync
       </button>
 
-      <button mat-stroked-button (click)="loadJobs()" data-testid="refresh-jobs-button">
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="loadJobs(true)"
+        data-testid="refresh-jobs-button"
+      >
         Refresh
       </button>
     </div>
@@ -47,7 +55,9 @@
     <table mat-table [dataSource]="jobs()" class="mat-elevation-z2" data-testid="job-queue-table">
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef>Job ID</th>
-        <td mat-cell *matCellDef="let job" [attr.data-testid]="'job-id-' + job.id">{{ job.id }}</td>
+        <td mat-cell *matCellDef="let job" [attr.data-testid]="'job-id-' + job.id">
+          {{ job.id }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="type">
@@ -58,7 +68,9 @@
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef>Status</th>
         <td mat-cell *matCellDef="let job" [attr.data-testid]="'job-status-' + job.id">
-          {{ job.status }}
+          <span class="status-pill" [ngClass]="'status-' + job.status">
+            {{ job.status }}
+          </span>
         </td>
       </ng-container>
 
