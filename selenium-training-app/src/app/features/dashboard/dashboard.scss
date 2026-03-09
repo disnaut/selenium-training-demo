@@ -1,0 +1,72 @@
+.dashboard-page {
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.dashboard-header {
+  margin-bottom: 1.5rem;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.dashboard-header p {
+  margin: 0.5rem 0 0;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.dashboard-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.welcome-card,
+.activity-card {
+  width: 100%;
+}
+
+.quick-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.stat-card {
+  min-height: 160px;
+}
+
+.stat-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.stat-title {
+  font-weight: 600;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.stat-description {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.72);
+}
+
+mat-list-item {
+  height: auto !important;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}

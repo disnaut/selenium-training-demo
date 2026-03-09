@@ -1,4 +1,99 @@
-<div data-testid="dashboard-page">
-  <h1 data-testid="dashboard-title">Dashboard</h1>
-  <p>Welcome to the Inventory Admin Portal.</p>
+<div class="dashboard-page" data-testid="dashboard-page">
+  <header class="dashboard-header" data-testid="dashboard-header">
+    <div>
+      <h1 data-testid="dashboard-title">Dashboard</h1>
+      <p data-testid="dashboard-subtitle">Welcome to the Inventory Admin Portal.</p>
+    </div>
+  </header>
+
+  <section class="dashboard-grid">
+    <mat-card class="welcome-card" data-testid="dashboard-welcome-card">
+      <mat-card-header>
+        <mat-card-title data-testid="dashboard-welcome-title"> Welcome back </mat-card-title>
+        <mat-card-subtitle data-testid="dashboard-welcome-subtitle">
+          Use the quick actions below to navigate through the training app.
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p data-testid="dashboard-welcome-message">
+          This page is intentionally simple so your Selenium tests can begin with stable navigation,
+          text assertions, and predictable click actions.
+        </p>
+      </mat-card-content>
+
+      <mat-card-actions class="quick-actions">
+        <button
+          mat-raised-button
+          color="primary"
+          routerLink="/inventory"
+          data-testid="dashboard-go-to-inventory-button"
+        >
+          Go to Inventory
+        </button>
+
+        <button mat-stroked-button type="button" data-testid="dashboard-view-jobs-button">
+          View Jobs
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <div class="stats-grid" data-testid="dashboard-stats-grid">
+      @for (stat of stats; track stat.testId) {
+        <mat-card class="stat-card" [attr.data-testid]="stat.testId">
+          <mat-card-content>
+            <div class="stat-card-header">
+              <mat-icon [attr.data-testid]="stat.testId + '-icon'">
+                {{ stat.icon }}
+              </mat-icon>
+              <span class="stat-title" [attr.data-testid]="stat.testId + '-title'">
+                {{ stat.title }}
+              </span>
+            </div>
+
+            <div class="stat-value" [attr.data-testid]="stat.testId + '-value'">
+              {{ stat.value }}
+            </div>
+
+            <p class="stat-description" [attr.data-testid]="stat.testId + '-description'">
+              {{ stat.description }}
+            </p>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+
+    <mat-card class="activity-card" data-testid="dashboard-activity-card">
+      <mat-card-header>
+        <mat-card-title data-testid="dashboard-activity-title"> Recent Activity </mat-card-title>
+        <mat-card-subtitle data-testid="dashboard-activity-subtitle">
+          Sample entries for list assertions and traversal
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <mat-list data-testid="dashboard-activity-list">
+          @for (item of recentActivity; track item.testId; let isLast = $last) {
+            <mat-list-item [attr.data-testid]="item.testId">
+              <div matListItemTitle [attr.data-testid]="item.testId + '-title'">
+                {{ item.title }}
+              </div>
+
+              <div matListItemLine [attr.data-testid]="item.testId + '-description'">
+                {{ item.description }}
+              </div>
+
+              <div matListItemLine [attr.data-testid]="item.testId + '-timestamp'">
+                {{ item.timestamp }}
+              </div>
+            </mat-list-item>
+
+            @if (!isLast) {
+              <mat-divider></mat-divider>
+            }
+          }
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </section>
 </div>
