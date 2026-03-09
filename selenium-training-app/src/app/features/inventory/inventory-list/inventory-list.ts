@@ -45,6 +45,7 @@ export class InventoryList {
   protected readonly isLoading = signal(true);
   private readonly inventoryService = inject(InventoryData);
   private readonly router = inject(Router);
+  protected readonly filterValue = signal('');
 
   protected readonly displayedColumns: string[] = [
     'sku',
@@ -81,15 +82,19 @@ export class InventoryList {
     this.dataSource.filterPredicate = (item: InventoryItem, filter: string) => {
       const normalizedFilter = filter.trim().toLowerCase();
 
-      return (
-        item.sku.toLowerCase().includes(normalizedFilter) ||
-        item.name.toLowerCase().includes(normalizedFilter) ||
-        item.category.toLowerCase().includes(normalizedFilter) ||
-        item.status.toLowerCase().includes(normalizedFilter) ||
-        item.location.toLowerCase().includes(normalizedFilter)
-      );
+      return [
+        item.sku,
+        item.name,
+        item.category,
+        item.quantity.toString(),
+        item.status,
+        item.location,
+        item.lastUpdated,
+      ]
+        .join(' ')
+        .toLowerCase()
+        .includes(normalizedFilter);
     };
-
     setTimeout(() => {
       this.dataSource.data = MOCK_INVENTORY_ITEMS;
       this.isLoading.set(false);
@@ -98,7 +103,19 @@ export class InventoryList {
 
   protected applyFilter(event: Event): void {
     const input = event.target as HTMLInputElement;
-    this.dataSource.filter = input.value.trim().toLowerCase();
+    const value = input.value.trim().toLowerCase();
+
+    this.filterValue.set(input.value);
+    this.dataSource.filter = value;
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  protected clearFilter(): void {
+    this.filterValue.set('');
+    this.dataSource.filter = '';
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();

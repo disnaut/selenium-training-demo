@@ -17,9 +17,23 @@
             matInput
             type="text"
             (input)="applyFilter($event)"
+            [value]="filterValue()"
             placeholder="Search by SKU, name, category, status, or location"
             data-testid="inventory-filter-input"
           />
+
+          @if (filterValue()) {
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              aria-label="Clear filter"
+              (click)="clearFilter()"
+              data-testid="inventory-filter-clear-button"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          }
         </mat-form-field>
       </div>
 
@@ -184,14 +198,17 @@
                   type="button"
                   (click)="editItem(item); $event.stopPropagation()"
                   aria-label="Edit inventory item"
+                  [attr.data-testid]="'inventory-row-' + item.id + '-edit-button'"
                 >
                   <mat-icon>edit</mat-icon>
                 </button>
+
                 <button
                   mat-icon-button
                   type="button"
                   (click)="deleteItem(item); $event.stopPropagation()"
                   aria-label="Delete inventory item"
+                  [attr.data-testid]="'inventory-row-' + item.id + '-delete-button'"
                 >
                   <mat-icon>delete</mat-icon>
                 </button>
