@@ -1,4 +1,4 @@
-import { Component, ViewChild, signal } from '@angular/core';
+import { Component, ViewChild, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -9,9 +9,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { InventoryItem } from '../../../shared/models/inventory-item';
 import { MOCK_INVENTORY_ITEMS } from '../../../shared/data/mock-inventory-items';
+import { InventoryDialog } from '../inventory-dialog/inventory-dialog';
 
 @Component({
   selector: 'app-inventory-list',
@@ -27,11 +30,16 @@ import { MOCK_INVENTORY_ITEMS } from '../../../shared/data/mock-inventory-items'
     MatIconModule,
     MatCardModule,
     MatProgressSpinnerModule,
+    MatDialogModule,
+    MatSnackBarModule,
   ],
   templateUrl: './inventory-list.html',
   styleUrl: './inventory-list.scss',
 })
 export class InventoryList {
+  private readonly dialog = inject(MatDialog);
+  private readonly snackBar = inject(MatSnackBar);
+
   protected readonly isLoading = signal(true);
 
   protected readonly displayedColumns: string[] = [
@@ -90,7 +98,29 @@ export class InventoryList {
   }
 
   protected editItem(item: InventoryItem): void {
-    console.log('Edit item', item);
+    const dialogRef = this.dialog.open(InventoryDialog, {
+      width: '700px',
+      disableClose: true,
+      data: { ...item },
+    });
+
+    dialogRef.afterClosed().subscribe((updatedItem: InventoryItem | undefined) => {
+      if (!updatedItem) {
+        return;
+      }
+
+      const updatedData = this.dataSource.data.map((existingItem) =>
+        existingItem.id === updatedItem.id ? updatedItem : existingItem,
+      );
+
+      this.dataSource.data = [...updatedData];
+
+      this.snackBar.open(`Saved changes to ${updatedItem.name}.`, 'Dismiss', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+      });
+    });
   }
 
   protected deleteItem(item: InventoryItem): void {

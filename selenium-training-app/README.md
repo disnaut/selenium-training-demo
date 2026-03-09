@@ -67,3 +67,5 @@ For more information on using the Angular CLI, including detailed command refere
 - [ ] fake auth service instead of inline setTimeout
 - [ ] add a loading overlay
 - [ ] add one or two tempting bad selectors so students can compare approaches
+- [ ] Add login page outside of app shell
+- [ ] Add dashboard and inventory inside of app shell with toolbar and side nav
