@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
@@ -8,12 +8,13 @@ import { MatListModule } from '@angular/material/list';
   selector: 'app-layout',
   imports: [
     RouterLink,
+    RouterLinkActive,
     RouterOutlet,
     MatToolbarModule,
     MatSidenavModule,
-    MatListModule
+    MatListModule,
   ],
   templateUrl: './layout.html',
-  styleUrl: './layout.scss'
+  styleUrl: './layout.scss',
 })
 export class Layout {}

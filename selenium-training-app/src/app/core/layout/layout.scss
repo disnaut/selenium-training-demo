@@ -1,0 +1,24 @@
+.layout-container {
+  height: 100vh;
+}
+
+.layout-sidenav {
+  width: 240px;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.layout-brand {
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.layout-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.layout-content {
+  padding: 1.5rem;
+}

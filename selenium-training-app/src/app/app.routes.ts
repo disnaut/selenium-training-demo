@@ -1,21 +1,19 @@
 import { Routes } from '@angular/router';
-import { Layout } from './core/layout/layout';
 
 export const routes: Routes = [
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full',
+  },
   {
     path: 'login',
     loadComponent: () => import('./features/auth/login/login').then((m) => m.Login),
   },
-
   {
     path: '',
-    component: Layout,
+    loadComponent: () => import('./core/layout/layout').then((m) => m.Layout),
     children: [
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full',
-      },
       {
         path: 'dashboard',
         loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.Dashboard),
@@ -38,9 +36,8 @@ export const routes: Routes = [
       },
     ],
   },
-
   {
     path: '**',
-    redirectTo: 'dashboard',
+    redirectTo: 'login',
   },
 ];

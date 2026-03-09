@@ -1,8 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -10,6 +10,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AuthService } from '../../../core/services/auth';
 
 @Component({
   selector: 'app-login',
@@ -22,14 +23,16 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatCheckboxModule,
     MatButtonModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   templateUrl: './login.html',
-  styleUrl: './login.scss'
+  styleUrl: './login.scss',
 })
 export class Login {
   private readonly formBuilder = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+  private readonly destroyRef = inject(DestroyRef);
 
   protected readonly isSubmitting = signal(false);
   protected readonly loginError = signal<string | null>(null);
@@ -38,7 +41,7 @@ export class Login {
   protected readonly loginForm = this.formBuilder.group({
     username: ['', [Validators.required]],
     password: ['', [Validators.required]],
-    rememberMe: [false]
+    rememberMe: [false],
   });
 
   protected submit(): void {
@@ -52,21 +55,21 @@ export class Login {
 
     const username = this.loginForm.controls.username.value ?? '';
     const password = this.loginForm.controls.password.value ?? '';
+    const rememberMe = this.loginForm.controls.rememberMe.value ?? false;
 
-    setTimeout(() => {
-      const isValidLogin =
-        username === 'testuser' &&
-        password === 'password123';
+    this.authService
+      .login(username, password, rememberMe)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        this.isSubmitting.set(false);
 
-      this.isSubmitting.set(false);
+        if (!result.success) {
+          this.loginError.set(result.errorMessage ?? 'Unable to sign in at this time.');
+          return;
+        }
 
-      if (!isValidLogin) {
-        this.loginError.set('Invalid username or password.');
-        return;
-      }
-
-      this.router.navigate(['/dashboard']);
-    }, 1200);
+        this.router.navigate(['/dashboard']);
+      });
   }
 
   protected togglePasswordVisibility(): void {
