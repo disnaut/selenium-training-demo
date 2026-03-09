@@ -1,9 +1,3 @@
-# TODO's after page creation
+# Introduction
 
-- [ ] Snackbar on successful login
-- [ ] Add route guard
-- [ ] fake auth service instead of inline setTimeout
-- [ ] add a loading overlay
-- [ ] add one or two tempting bad selectors so students can compare approaches
-- [ ] Add login page outside of app shell
-- [ ] Add dashboard and inventory inside of app shell with toolbar and side nav
+Hello, this is for a training that I gave to help developers understand what Selenium is and how they can incorporate it into their projects.
