@@ -1,0 +1,83 @@
+.inventory-page {
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.inventory-header {
+  margin-bottom: 1.5rem;
+}
+
+.inventory-header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.inventory-header p {
+  margin: 0.5rem 0 0;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.inventory-card {
+  width: 100%;
+}
+
+.inventory-toolbar {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 1rem;
+}
+
+.filter-field {
+  width: 100%;
+  max-width: 420px;
+}
+
+.loading-container {
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.inventory-table {
+  width: 100%;
+}
+
+.actions-cell {
+  white-space: nowrap;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.status-in-stock {
+  background-color: #d9f2e3;
+  color: #1d6b3b;
+}
+
+.status-low-stock {
+  background-color: #fff1cc;
+  color: #8a5a00;
+}
+
+.status-out-of-stock {
+  background-color: #f8d7da;
+  color: #8b1e2d;
+}
+
+.no-data-cell {
+  text-align: center;
+  padding: 1rem;
+}

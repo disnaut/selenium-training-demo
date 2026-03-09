@@ -1,4 +1,234 @@
-<div data-testid="inventory-page">
-  <h1 data-testid="inventory-title">Inventory</h1>
-  <p>Inventory list will be built next.</p>
+<div class="inventory-page" data-testid="inventory-page">
+  <header class="inventory-header" data-testid="inventory-header">
+    <div>
+      <h1 data-testid="inventory-title">Inventory</h1>
+      <p data-testid="inventory-subtitle">
+        Review available inventory items, filter records, and perform row actions.
+      </p>
+    </div>
+  </header>
+
+  <mat-card class="inventory-card" data-testid="inventory-card">
+    <mat-card-content>
+      <div class="inventory-toolbar" data-testid="inventory-toolbar">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Filter inventory</mat-label>
+          <input
+            matInput
+            type="text"
+            (input)="applyFilter($event)"
+            placeholder="Search by SKU, name, category, status, or location"
+            data-testid="inventory-filter-input"
+          />
+        </mat-form-field>
+      </div>
+
+      @if (isLoading()) {
+        <div class="loading-container" data-testid="inventory-loading-container">
+          <mat-spinner diameter="48"></mat-spinner>
+          <p data-testid="inventory-loading-text">Loading inventory...</p>
+        </div>
+      } @else {
+        <div class="table-wrapper" data-testid="inventory-table-wrapper">
+          <table
+            mat-table
+            [dataSource]="dataSource"
+            matSort
+            class="inventory-table"
+            data-testid="inventory-table"
+          >
+            <ng-container matColumnDef="sku">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                data-testid="inventory-header-sku"
+              >
+                SKU
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let item"
+                [attr.data-testid]="'inventory-cell-sku-' + item.id"
+              >
+                {{ item.sku }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                data-testid="inventory-header-name"
+              >
+                Name
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let item"
+                [attr.data-testid]="'inventory-cell-name-' + item.id"
+              >
+                {{ item.name }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="category">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                data-testid="inventory-header-category"
+              >
+                Category
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let item"
+                [attr.data-testid]="'inventory-cell-category-' + item.id"
+              >
+                {{ item.category }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="quantity">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                data-testid="inventory-header-quantity"
+              >
+                Quantity
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let item"
+                [attr.data-testid]="'inventory-cell-quantity-' + item.id"
+              >
+                {{ item.quantity }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                data-testid="inventory-header-status"
+              >
+                Status
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let item"
+                [attr.data-testid]="'inventory-cell-status-' + item.id"
+              >
+                <span
+                  class="status-chip"
+                  [ngClass]="getStatusClass(item.status)"
+                  [attr.data-testid]="'inventory-status-chip-' + item.id"
+                >
+                  {{ item.status }}
+                </span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="location">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                data-testid="inventory-header-location"
+              >
+                Location
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let item"
+                [attr.data-testid]="'inventory-cell-location-' + item.id"
+              >
+                {{ item.location }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="lastUpdated">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                data-testid="inventory-header-last-updated"
+              >
+                Last Updated
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let item"
+                [attr.data-testid]="'inventory-cell-last-updated-' + item.id"
+              >
+                {{ item.lastUpdated }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef data-testid="inventory-header-actions">
+                Actions
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let item"
+                class="actions-cell"
+                [attr.data-testid]="'inventory-cell-actions-' + item.id"
+              >
+                <button
+                  mat-icon-button
+                  type="button"
+                  (click)="editItem(item)"
+                  [attr.data-testid]="'inventory-edit-button-' + item.id"
+                  aria-label="Edit inventory item"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+
+                <button
+                  mat-icon-button
+                  type="button"
+                  (click)="deleteItem(item)"
+                  [attr.data-testid]="'inventory-delete-button-' + item.id"
+                  aria-label="Delete inventory item"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr
+              mat-header-row
+              *matHeaderRowDef="displayedColumns"
+              data-testid="inventory-header-row"
+            ></tr>
+
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumns"
+              [attr.data-testid]="'inventory-row-' + row.id"
+            ></tr>
+
+            <tr class="mat-row" *matNoDataRow data-testid="inventory-no-data-row">
+              <td class="mat-cell no-data-cell" colspan="8">
+                No inventory items match the current filter.
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <mat-paginator
+          [pageSize]="5"
+          [pageSizeOptions]="[5, 10, 20]"
+          showFirstLastButtons
+          data-testid="inventory-paginator"
+        >
+        </mat-paginator>
+      }
+    </mat-card-content>
+  </mat-card>
 </div>
