@@ -1,1 +1,92 @@
-<p>login works!</p>
+<div class="login-page">
+  <mat-card class="login-card" data-testid="login-card">
+    <mat-card-header>
+      <mat-card-title data-testid="login-title">
+        Inventory Admin Portal
+      </mat-card-title>
+
+      <mat-card-subtitle data-testid="login-subtitle">
+        Sign in to continue
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form
+        [formGroup]="loginForm"
+        (ngSubmit)="submit()"
+        class="login-form"
+        data-testid="login-form">
+
+        <mat-form-field appearance="outline">
+          <mat-label>Username</mat-label>
+          <input
+            matInput
+            formControlName="username"
+            autocomplete="username"
+            data-testid="login-username-input" />
+
+          @if (usernameControl.hasError('required') && usernameControl.touched) {
+            <mat-error data-testid="login-username-required-error">
+              Username is required.
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            autocomplete="current-password"
+            data-testid="login-password-input" />
+
+          <button
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
+            data-testid="login-password-visibility-button">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+
+          @if (passwordControl.hasError('required') && passwordControl.touched) {
+            <mat-error data-testid="login-password-required-error">
+              Password is required.
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-checkbox
+          formControlName="rememberMe"
+          data-testid="login-remember-me-checkbox">
+          Remember me
+        </mat-checkbox>
+
+        @if (loginError(); as errorMessage) {
+          <div class="login-error" data-testid="login-error-message">
+            {{ errorMessage }}
+          </div>
+        }
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="login-button"
+          [disabled]="isSubmitting()"
+          data-testid="login-submit-button">
+          @if (!isSubmitting()) {
+            <span>Login</span>
+          } @else {
+            <span class="login-button-content">
+              <mat-spinner diameter="20"></mat-spinner>
+              <span>Signing in...</span>
+            </span>
+          }
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
