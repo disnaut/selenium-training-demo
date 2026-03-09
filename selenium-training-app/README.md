@@ -57,3 +57,13 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+# Notes from development
+
+## Post login page creation
+
+- [ ] Snackbar on successful login
+- [ ] Add route guard
+- [ ] fake auth service instead of inline setTimeout
+- [ ] add a loading overlay
+- [ ] add one or two tempting bad selectors so students can compare approaches
