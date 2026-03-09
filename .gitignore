@@ -26,4 +26,4 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-/selenum-training-app/package-lock.json
+selenium-training-app/package-lock.json
