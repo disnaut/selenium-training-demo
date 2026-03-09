@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -17,6 +18,7 @@ import { AuthService } from '../../../core/services/auth';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    MatSnackBarModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -33,6 +35,7 @@ export class Login {
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly snackBar = inject(MatSnackBar);
 
   protected readonly isSubmitting = signal(false);
   protected readonly loginError = signal<string | null>(null);
@@ -52,6 +55,7 @@ export class Login {
 
     this.loginError.set(null);
     this.isSubmitting.set(true);
+    this.loginForm.disable();
 
     const username = this.loginForm.controls.username.value ?? '';
     const password = this.loginForm.controls.password.value ?? '';
@@ -62,11 +66,24 @@ export class Login {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
         this.isSubmitting.set(false);
+        this.loginForm.enable();
 
         if (!result.success) {
-          this.loginError.set(result.errorMessage ?? 'Unable to sign in at this time.');
+          const message = result.errorMessage ?? 'Unable to sign in at this time.';
+          this.loginError.set(message);
+          this.snackBar.open(message, 'Dismiss', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
           return;
         }
+
+        this.snackBar.open('Login successful.', 'Dismiss', {
+          duration: 2500,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
 
         this.router.navigate(['/dashboard']);
       });
