@@ -15,6 +15,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { InventoryItem } from '../../../shared/models/inventory-item';
 import { MOCK_INVENTORY_ITEMS } from '../../../shared/data/mock-inventory-items';
 import { InventoryDialog } from '../inventory-dialog/inventory-dialog';
+import { InventoryData } from '../../../shared/services/inventory-data';
 
 @Component({
   selector: 'app-inventory-list',
@@ -41,6 +42,7 @@ export class InventoryList {
   private readonly snackBar = inject(MatSnackBar);
 
   protected readonly isLoading = signal(true);
+  private readonly inventoryService = inject(InventoryData);
 
   protected readonly displayedColumns: string[] = [
     'sku',
@@ -100,29 +102,37 @@ export class InventoryList {
   protected editItem(item: InventoryItem): void {
     const dialogRef = this.dialog.open(InventoryDialog, {
       width: '700px',
-      disableClose: true,
       data: { ...item },
+      disableClose: true,
     });
 
-    dialogRef.afterClosed().subscribe((updatedItem: InventoryItem | undefined) => {
-      if (!updatedItem) {
+    dialogRef.afterClosed().subscribe((result) => {
+      if (!result) {
         return;
       }
 
-      const updatedData = this.dataSource.data.map((existingItem) =>
-        existingItem.id === updatedItem.id ? updatedItem : existingItem,
-      );
+      this.inventoryService.updateInventoryItem(result).subscribe({
+        next: () => {
+          const updatedData = this.dataSource.data.map((existing) =>
+            existing.id === result.id ? result : existing,
+          );
 
-      this.dataSource.data = [...updatedData];
+          this.dataSource.data = [...updatedData];
 
-      this.snackBar.open(`Saved changes to ${updatedItem.name}.`, 'Dismiss', {
-        duration: 3000,
-        horizontalPosition: 'right',
-        verticalPosition: 'top',
+          this.snackBar.open('Item saved successfully.', 'Dismiss', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top',
+          });
+        },
+        error: () => {
+          this.snackBar.open('Failed to save item.', 'Dismiss', {
+            duration: 4000,
+          });
+        },
       });
     });
   }
-
   protected deleteItem(item: InventoryItem): void {
     console.log('Delete item', item);
   }
