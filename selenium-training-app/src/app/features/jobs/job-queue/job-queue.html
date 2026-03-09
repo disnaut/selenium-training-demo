@@ -1,1 +1,92 @@
-<p>job-queue works!</p>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title data-testid="job-queue-title">Bulk Actions Queue</mat-card-title>
+    <mat-card-subtitle> Simulated async jobs for Selenium training </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="actions">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="startJob('price-update')"
+        data-testid="start-price-update-button"
+      >
+        Start Price Update
+      </button>
+
+      <button
+        mat-raised-button
+        color="accent"
+        (click)="startJob('archive')"
+        data-testid="start-archive-button"
+      >
+        Start Archive
+      </button>
+
+      <button
+        mat-raised-button
+        (click)="startJob('restock-sync')"
+        data-testid="start-restock-sync-button"
+      >
+        Start Restock Sync
+      </button>
+
+      <button mat-stroked-button (click)="loadJobs()" data-testid="refresh-jobs-button">
+        Refresh
+      </button>
+    </div>
+
+    @if (loading()) {
+      <div class="loading-panel" data-testid="job-queue-loading">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+    }
+
+    <table mat-table [dataSource]="jobs()" class="mat-elevation-z2" data-testid="job-queue-table">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>Job ID</th>
+        <td mat-cell *matCellDef="let job" [attr.data-testid]="'job-id-' + job.id">{{ job.id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>Type</th>
+        <td mat-cell *matCellDef="let job">{{ job.type }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let job" [attr.data-testid]="'job-status-' + job.id">
+          {{ job.status }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="itemCount">
+        <th mat-header-cell *matHeaderCellDef>Items</th>
+        <td mat-cell *matCellDef="let job">{{ job.itemCount }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="startedAt">
+        <th mat-header-cell *matHeaderCellDef>Started</th>
+        <td mat-cell *matCellDef="let job">
+          {{ job.startedAt ? (job.startedAt | date: 'short') : 'Not started' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="completedAt">
+        <th mat-header-cell *matHeaderCellDef>Completed</th>
+        <td mat-cell *matCellDef="let job">
+          {{ job.completedAt ? (job.completedAt | date: 'short') : 'Pending' }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        [attr.data-testid]="'job-row-' + row.id"
+      ></tr>
+    </table>
+  </mat-card-content>
+</mat-card>
