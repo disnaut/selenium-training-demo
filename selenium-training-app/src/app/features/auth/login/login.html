@@ -11,9 +11,9 @@
           <mat-form-field appearance="outline">
             <mat-label>Username</mat-label>
             <input matInput formControlName="username" data-testid="login-username-input" />
-            <mat-error *ngIf="usernameControl.touched && usernameControl.invalid">
-              Username is required.
-            </mat-error>
+            @if (usernameControl.touched && usernameControl.invalid) {
+              <mat-error> Username is required. </mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -33,9 +33,9 @@
             >
               <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
             </button>
-            <mat-error *ngIf="passwordControl.touched && passwordControl.invalid">
-              Password is required.
-            </mat-error>
+            @if (passwordControl.touched && passwordControl.invalid) {
+              <mat-error>Password is required.</mat-error>
+            }
           </mat-form-field>
 
           <mat-checkbox formControlName="rememberMe" data-testid="login-remember-me-checkbox">
@@ -59,10 +59,12 @@
         </form>
       </mat-card-content>
 
-      <div class="login-overlay" *ngIf="isSubmitting()" data-testid="login-loading-overlay">
-        <mat-spinner diameter="40"></mat-spinner>
-        <div class="login-overlay-text">Authenticating...</div>
-      </div>
+      @if (isSubmitting()) {
+        <div class="login-overlay" data-testid="login-loading-overlay">
+          <mat-spinner diameter="40"></mat-spinner>
+          <div class="login-overlay-text">Authenticating...</div>
+        </div>
+      }
     </mat-card>
   </div>
 </div>
