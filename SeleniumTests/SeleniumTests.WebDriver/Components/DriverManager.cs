@@ -187,4 +187,24 @@ sealed class DriverManager
         File.AppendAllText(logsPath, $"{DateTime.Now}: {msg}{Environment.NewLine}");
         return this;
     }
+
+    public string GetTextFromWebElement(WebElementDetails elementDetails)
+    {
+        Log($"Attempting to get text from element: {elementDetails.Name}");
+        try
+        {
+            var element = Wait.Until(ExpectedConditions.ElementIsVisible(elementDetails.Locator));
+            return element.Text;
+        }
+        catch (WebDriverTimeoutException)
+        {
+            throw new Exception(
+                $"Element not visible: {elementDetails.Name} after {Wait.Timeout.TotalSeconds} seconds."
+            );
+        }
+        catch (WebDriverException)
+        {
+            throw new Exception($"Failed to get text from element: {elementDetails.Name}");
+        }
+    }
 }

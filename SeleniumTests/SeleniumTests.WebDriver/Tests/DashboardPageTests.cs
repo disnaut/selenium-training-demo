@@ -1,14 +1,11 @@
-﻿using SeleniumTests.WebDriver.Enums;
+using SeleniumTests.WebDriver.Enums;
 using SeleniumTests.WebDriver.Pages;
-using SeleniumTests.WebDriver.Tests;
 
-namespace SeleniumTests.WebDriver;
+namespace SeleniumTests.WebDriver.Tests;
 
-[TestFixture(DriverType.Chrome)]
-[TestFixture(DriverType.Edge)]
-class UnitTest1(DriverType driverType) : AbstractSeleniumTest(driverType)
+class DashboardPageTests(DriverType driverType) : AbstractSeleniumTest(driverType)
 {
-    LoginPage page;
+    DashboardPage page;
 
     [SetUp]
     public void Setup()
@@ -17,14 +14,18 @@ class UnitTest1(DriverType driverType) : AbstractSeleniumTest(driverType)
         int attemptsRemaining = 2;
 
         bool loaded = false;
-        page = new(Manager);
+        var startPage = new LoginPage(Manager);
 
         while (attemptsRemaining > 0 && !loaded)
         {
             try
             {
                 Manager.Log($"Attempting to get {page}. Attempts remaining: {attemptsRemaining}");
-                page.GoTo();
+                page = startPage
+                    .GoTo()
+                    .EnterUsername("testuser")
+                    .EnterPassword("password123")
+                    .ClickSignIn();
                 loaded = true;
             }
             catch (Exception ex)
@@ -38,9 +39,5 @@ class UnitTest1(DriverType driverType) : AbstractSeleniumTest(driverType)
     }
 
     [Test]
-    public void LoginSuccessfully()
-    {
-        page.EnterUsername("testuser").EnterPassword("password123");
-        Thread.Sleep(5000);
-    }
+    public void DashboardQuickActionButtonsWork() { }
 }

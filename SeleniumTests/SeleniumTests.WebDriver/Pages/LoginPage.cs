@@ -1,6 +1,7 @@
 using OpenQA.Selenium;
 using SeleniumTests.WebDriver.Components;
 using SeleniumTests.WebDriver.Interfaces;
+using SeleniumTests.WebDriver.Pages.Abstract;
 
 namespace SeleniumTests.WebDriver.Pages;
 
@@ -12,9 +13,23 @@ class LoginPage(DriverManager Manager) : ILoadable<LoginPage>
         "Username Input"
     );
 
+    private readonly WebElementDetails usernameRequiredErrorMessage = new(
+        By.XPath(
+            "//input[@data-testid='login-username-input']/ancestor::mat-form-field//mat-error"
+        ),
+        "Username Required Error Message"
+    );
+
     private readonly WebElementDetails passwordInput = new(
         By.CssSelector("[data-testid='login-password-input']"),
         "Password Input"
+    );
+
+    private readonly WebElementDetails passwordRequiredErrorMessage = new(
+        By.XPath(
+            "//input[@data-testid='login-password-input']/ancestor::mat-form-field//mat-error"
+        ),
+        "Password Required Error Message"
     );
 
     private readonly WebElementDetails submitButton = new(
@@ -62,5 +77,33 @@ class LoginPage(DriverManager Manager) : ILoadable<LoginPage>
     {
         Manager.TypeIntoTextbox(passwordInput, password, true);
         return this;
+    }
+
+    public DashboardPage ClickSignIn()
+    {
+        Manager.Click(submitButton);
+        Manager.Unload(loadingOverlay);
+        return new DashboardPage(Manager).Load();
+    }
+
+    public LoginPage ClickSignInExpectingErrors()
+    {
+        Manager.Click(submitButton);
+        return Load();
+    }
+
+    public bool VerifyUsernameRequiredErrorMessage()
+    {
+        return Manager.Load(usernameRequiredErrorMessage).IsDisplayed(usernameRequiredErrorMessage);
+    }
+
+    public bool VerifyPasswordRequiredErrorMessage()
+    {
+        return Manager.Load(passwordRequiredErrorMessage).IsDisplayed(passwordRequiredErrorMessage);
+    }
+
+    public string GetLoginErrorMessage()
+    {
+        return Manager.Load(errorMessage).GetTextFromWebElement(errorMessage);
     }
 }
