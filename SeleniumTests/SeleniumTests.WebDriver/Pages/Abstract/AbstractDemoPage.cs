@@ -49,4 +49,22 @@ abstract class AbstractDemoPage(DriverManager Manager) : ILoadable<AbstractDemoP
         Manager.Click(LogoutButton);
         return new LoginPage(Manager).Load();
     }
+
+    public InventoryPage ClickInventoryNavItem()
+    {
+        Manager.Click(InventoryNavItem);
+        return new InventoryPage(Manager).Load();
+    }
+
+    public DashboardPage ClickDashboardNavItem()
+    {
+        Manager.Click(DashBoardNavItem);
+        return new DashboardPage(Manager).Load();
+    }
+
+    public JobsPage ClickJobsNavItem()
+    {
+        Manager.Click(JobsNavItem);
+        return new JobsPage(Manager).Load();
+    }
 }

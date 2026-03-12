@@ -1,7 +1,6 @@
 using OpenQA.Selenium;
 using SeleniumTests.WebDriver.Components;
 using SeleniumTests.WebDriver.Interfaces;
-using SeleniumTests.WebDriver.Pages.Abstract;
 
 namespace SeleniumTests.WebDriver.Pages;
 

@@ -3,9 +3,11 @@ using SeleniumTests.WebDriver.Pages;
 
 namespace SeleniumTests.WebDriver.Tests;
 
+[TestFixture(DriverType.Chrome)]
+[TestFixture(DriverType.Edge)]
 class DashboardPageTests(DriverType driverType) : AbstractSeleniumTest(driverType)
 {
-    DashboardPage page;
+    LoginPage page;
 
     [SetUp]
     public void Setup()
@@ -14,18 +16,14 @@ class DashboardPageTests(DriverType driverType) : AbstractSeleniumTest(driverTyp
         int attemptsRemaining = 2;
 
         bool loaded = false;
-        var startPage = new LoginPage(Manager);
+        page = new(Manager);
 
         while (attemptsRemaining > 0 && !loaded)
         {
             try
             {
                 Manager.Log($"Attempting to get {page}. Attempts remaining: {attemptsRemaining}");
-                page = startPage
-                    .GoTo()
-                    .EnterUsername("testuser")
-                    .EnterPassword("password123")
-                    .ClickSignIn();
+                page.GoTo();
                 loaded = true;
             }
             catch (Exception ex)
@@ -39,5 +37,24 @@ class DashboardPageTests(DriverType driverType) : AbstractSeleniumTest(driverTyp
     }
 
     [Test]
-    public void DashboardQuickActionButtonsWork() { }
+    public void DashboardQuickActionButtonsWork()
+    {
+        page.EnterUsername("testuser").EnterPassword("password123");
+
+        var dashboardPage = page.ClickSignIn();
+
+        dashboardPage.ClickGoToInventoryButton();
+        Assert.That(
+            Manager.Driver.Url,
+            Does.Contain("inventory"),
+            "Clicking 'Go To Inventory' did not navigate to the inventory page"
+        );
+        Manager.Driver.Navigate().Back();
+        dashboardPage.ClickViewJobsButton();
+        Assert.That(
+            Manager.Driver.Url,
+            Does.Contain("jobs"),
+            "Clicking 'View Jobs' did not navigate to the jobs page"
+        );
+    }
 }

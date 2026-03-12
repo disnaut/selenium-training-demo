@@ -1,8 +1,7 @@
 ﻿using SeleniumTests.WebDriver.Enums;
 using SeleniumTests.WebDriver.Pages;
-using SeleniumTests.WebDriver.Tests;
 
-namespace SeleniumTests.WebDriver;
+namespace SeleniumTests.WebDriver.Tests;
 
 [TestFixture(DriverType.Chrome)]
 [TestFixture(DriverType.Edge)]
