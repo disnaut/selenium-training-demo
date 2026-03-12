@@ -60,11 +60,17 @@ class EditInventoryDialog(DriverManager Manager) : ILoadable<EditInventoryDialog
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// Clicks the increment button in the quantity input once.
+    /// </summary>
     public EditInventoryDialog IncrementQuantityInput()
     {
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// Clicks the decrement button in the quantity input once.
+    /// </summary>
     public EditInventoryDialog DecrementQuantityInput()
     {
         throw new NotImplementedException();

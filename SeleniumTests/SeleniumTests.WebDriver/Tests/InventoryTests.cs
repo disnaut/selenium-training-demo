@@ -3,13 +3,6 @@ using SeleniumTests.WebDriver.Pages;
 
 namespace SeleniumTests.WebDriver.Tests;
 
-enum SortOrder
-{
-    ASC,
-    DESC,
-    NONE,
-}
-
 [TestFixture(DriverType.Chrome)]
 [TestFixture(DriverType.Edge)]
 class InventoryTests(DriverType driverType) : AbstractSeleniumTest(driverType)
@@ -44,6 +37,14 @@ class InventoryTests(DriverType driverType) : AbstractSeleniumTest(driverType)
         }
     }
 
+    /// <summary>
+    /// This test is meant to verify that the sorting functionality of the inventory table works correctly.
+    /// Hints:
+    /// - You can get a copy of the data rows before clicking the header to verify that the data went back to normal after the third click of the same header.
+    /// - You will need to implement some method or series of methods that will determine if the table rows are in the correct order after each click of the header.
+    /// - Remember, you have a <tr> that has a number of <td>s inside of it. You don't have to verify every <td>, just the one that corresponds to the header you are clicking on.
+    ///     For example, if you are clicking the 'Name' header, you just need to verify that the <td> that corresponds to the 'Name' header is in the correct order.
+    /// </summary>
     [Test]
     public void InventoryPageTableSortWorks()
     {
@@ -73,14 +74,14 @@ class InventoryTests(DriverType driverType) : AbstractSeleniumTest(driverType)
         inventoryPage.ClickLastUpdatedHeader();
         inventoryPage.ClickLastUpdatedHeader();
         inventoryPage.ClickLastUpdatedHeader();
-
-        // You are to implement some method or series of methods that
-        // will determine if the table rows are in the correct order after each click of the header.
-
-        // Hint: You can get a copy of the data rows before clicking the header to verify
-        // that the data went back to normal after the third click of the same header.
     }
 
+    /// <summary>
+    /// This test is meant to verify that the filtering functionality of the inventory table works correctly.
+    /// Each time the filter input is used, you will need to verify that the rows presented are what should be expected.
+    /// Hints:
+    /// - You can look at the source code for inventory-list to see how the filter is implemented to get an idea of how to verify the results.
+    /// </summary>
     [Test]
     public void InventoryPageTableFilterWorks()
     {
@@ -103,6 +104,14 @@ class InventoryTests(DriverType driverType) : AbstractSeleniumTest(driverType)
         Assert.That(inventoryPage.GetNoItemsMessage(), Is.EqualTo(NO_ITEMS_MESSAGE));
     }
 
+    /// <summary>
+    /// This test is meant to verify that the pagination functionality of the inventory table works correctly.
+    /// After each interaction with the paginator, you will need to verify that the correct range of rows is being presented on the screen.
+    /// Hints:
+    /// - You can always just look for the <mat-option> tag if you are certain that no other <mat-option> tags are on the page.
+    /// - You should verify that the number that you want the paginator to be showing is actually the number that is being shown from the list of options.
+    /// - The 'x of y' text at the bottom of the table should change as you interact with the paginator, you can use this to verify that the correct range of rows is being shown on the screen. (e.g '1-10 of 50' should change to '11-20 of 50' after clicking next on the paginator)
+    /// </summary>
     [Test]
     public void InventoryPageTablePaginationWorks()
     {
@@ -111,7 +120,6 @@ class InventoryTests(DriverType driverType) : AbstractSeleniumTest(driverType)
             .ClickSignIn();
         var inventoryPage = dashboardPage.ClickInventoryNavItem();
 
-        // Change the paginator size to 10 and verify that there are 10 rows in the table.
         int currentTableLength = inventoryPage.GetDataRows().Count;
 
         inventoryPage.ChangePaginatorSizeTo(10);
@@ -122,17 +130,30 @@ class InventoryTests(DriverType driverType) : AbstractSeleniumTest(driverType)
         Assert.That(currentTableLength, Is.Not.EqualTo(prevTableLength));
         Assert.That(currentTableLength, Is.EqualTo(10));
 
-        // You are to implement some method or series of methods that will determine if
-        // the paginator is showing the correct range of numbers
-        // after clicking next, prev, last, and first on the paginator.
-
-        // Hint: How can you find the 'x of y' text at the bottom of the table?
         inventoryPage.ClickNextOnPaginator();
+        // Verify that Next worked
+
         inventoryPage.ClickPrevOnPaginator();
+        // Verify that Prev worked
+
         inventoryPage.ClickLastOnPaginator();
+        // Verify that Last worked
+
         inventoryPage.ClickFirstOnPaginator();
+        // Verify that First worked
     }
 
+    /// <summary>
+    /// This test should be done last. This requires you to create the entire Page-Object-Model for <see cref="EditInventoryDialog"/>.
+    /// This test is meant to verify that the in-line edit button works correctly for a given row.
+    /// This test also is trusting you to create your own assertions to verify changes 'saved' after clicking the save button on the dialog.
+    /// Hints:
+    /// - It isn't a bad idea for the "GetRandomDataRow" to use a seed so you can test the same row repeatedly.
+    /// - The Increment and Decrement methods are going to be difficult, but once you have one, you'll easily be able to do the other.
+    /// - Do not use any methods that will refresh the page because the data is loaded in memory so refreshing the page will cause you to lose any changes you have made because there is no backend.
+    /// - Make sure to verify that the changes you made were actually saved. You can do this by checking the text of the row you edited after clicking save and verifying that it matches what you entered into the dialog.
+    /// - Remember, you can always look at the source code for the inventory-list and edit-inventory-dialog components to get an idea of how the HTML is structured which will help you with your element selectors.
+    /// </summary>
     [Test]
     public void EditInventoryRowSavesSuccessfully()
     {
@@ -145,11 +166,12 @@ class InventoryTests(DriverType driverType) : AbstractSeleniumTest(driverType)
 
         // You are to implement the following methods:
 
-        dialog.ClearTextFromSKUInput();
-        dialog.ClearTextFromNameInput();
-        dialog.ClearTextFromCategoryInput();
-        dialog.ClearTextFromLocationInput();
-        dialog.ClearTextFromLastUpdatedInput();
+        dialog
+            .ClearTextFromSKUInput()
+            .ClearTextFromNameInput()
+            .ClearTextFromCategoryInput()
+            .ClearTextFromLocationInput()
+            .ClearTextFromLastUpdatedInput();
 
         // Assign your own values to these variables.
         string newSku = string.Empty;
@@ -171,10 +193,5 @@ class InventoryTests(DriverType driverType) : AbstractSeleniumTest(driverType)
         dialog.EnterTextIntoLocationInput(newLocation);
         dialog.EnterDateIntoLastUpdatedInput(newLastUpdated);
         dialog.ClickSaveButton();
-
-        // Now find the row you edited and verify that all the changes you made are in the table.
-        // IMPORTANT: You cannot refresh the page, and i would advise you to use the filter bar.
-
-        // You are to implement your own way of verifying the changes.
     }
 }
