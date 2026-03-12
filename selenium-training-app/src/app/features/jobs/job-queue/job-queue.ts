@@ -33,7 +33,7 @@ export class JobQueue implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
   protected readonly jobs = signal<BulkJob[]>([]);
-  protected readonly loading = signal(false);
+  protected readonly loading = signal(true);
 
   protected readonly displayedColumns = [
     'id',

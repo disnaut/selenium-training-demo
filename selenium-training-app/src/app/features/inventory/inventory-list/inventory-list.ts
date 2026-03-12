@@ -156,8 +156,33 @@ export class InventoryList {
       });
     });
   }
+
   protected deleteItem(item: InventoryItem): void {
-    console.log('Delete item', item);
+    this.inventoryService.deleteInventoryItem(item.id).subscribe({
+      next: () => {
+        const updatedData = this.dataSource.data.filter((existing) => existing.id !== item.id);
+
+        this.dataSource.data = [...updatedData];
+
+        if (this.dataSource.paginator) {
+          const hasVisibleRows = this.dataSource.filteredData.length > 0;
+          if (!hasVisibleRows) {
+            this.dataSource.paginator.firstPage();
+          }
+        }
+
+        this.snackBar.open('Item deleted successfully.', 'Dismiss', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+        });
+      },
+      error: () => {
+        this.snackBar.open('Failed to delete item.', 'Dismiss', {
+          duration: 4000,
+        });
+      },
+    });
   }
 
   protected getStatusClass(status: InventoryItem['status']): string {

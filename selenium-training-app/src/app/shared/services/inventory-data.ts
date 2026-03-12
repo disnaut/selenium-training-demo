@@ -83,4 +83,9 @@ export class InventoryData {
 
     return of(newJob).pipe(delay(1000));
   }
+
+  deleteInventoryItem(id: number): Observable<number> {
+    this.items = this.items.filter((item) => item.id !== id);
+    return of(id).pipe(delay(800));
+  }
 }
