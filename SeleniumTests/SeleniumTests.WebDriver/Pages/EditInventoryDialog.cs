@@ -35,7 +35,7 @@ class EditInventoryDialog(DriverManager Manager) : ILoadable<EditInventoryDialog
         throw new NotImplementedException();
     }
 
-    public EditInventoryDialog EnterTExtIntoSKUInput(string text)
+    public EditInventoryDialog EnterTextIntoSKUInput(string text)
     {
         throw new NotImplementedException();
     }
@@ -75,6 +75,11 @@ class EditInventoryDialog(DriverManager Manager) : ILoadable<EditInventoryDialog
         throw new NotImplementedException();
     }
 
+    public EditInventoryDialog SelectRandomStatusFromDropdown()
+    {
+        throw new NotImplementedException();
+    }
+
     public EditInventoryDialog EnterTextIntoLocationInput(string text)
     {
         throw new NotImplementedException();
@@ -90,12 +95,17 @@ class EditInventoryDialog(DriverManager Manager) : ILoadable<EditInventoryDialog
         throw new NotImplementedException();
     }
 
-    public InventoryPage ClickCancelButton()
+    public EditInventoryDialog ClearTextFromLastUpdatedInput()
     {
         throw new NotImplementedException();
     }
 
-    public InventoryPage ClickSaveButton()
+    public void ClickCancelButton()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void ClickSaveButton()
     {
         throw new NotImplementedException(
             "What can you do with this when there is the possibility that required fields are empty?"

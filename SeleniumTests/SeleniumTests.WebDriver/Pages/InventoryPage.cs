@@ -8,6 +8,7 @@ namespace SeleniumTests.WebDriver.Pages;
 
 class InventoryPage(DriverManager Manager) : AbstractDemoPage(Manager), ILoadable<InventoryPage>
 {
+    #region Web Element Details
     private readonly WebElementDetails inventoryFilterInput = new(
         By.CssSelector("[data-testid='inventory-filter-input']"),
         "Inventory Filter Input"
@@ -77,6 +78,7 @@ class InventoryPage(DriverManager Manager) : AbstractDemoPage(Manager), ILoadabl
         By.CssSelector("[data-testid^='inventory-row-']"),
         "Inventory Data Rows"
     );
+    #endregion
 
     public InventoryPage Load()
     {
@@ -97,12 +99,8 @@ class InventoryPage(DriverManager Manager) : AbstractDemoPage(Manager), ILoadabl
         return this;
     }
 
+    #region Paginator Methods
     public InventoryPage ChangePaginatorSizeTo(int size)
-    {
-        throw new NotImplementedException();
-    }
-
-    public int GetDataRowCount()
     {
         throw new NotImplementedException();
     }
@@ -127,20 +125,17 @@ class InventoryPage(DriverManager Manager) : AbstractDemoPage(Manager), ILoadabl
         throw new NotImplementedException();
     }
 
+    public string GetCurrentPaginatorRange()
+    {
+        throw new NotImplementedException();
+    }
+    #endregion
+
+    #region Filter Methods
     public InventoryPage EnterTextIntoFilter(string text)
     {
         Manager.TypeIntoTextbox(inventoryFilterInput, text);
         return this;
-    }
-
-    public ReadOnlyCollection<IWebElement> GetDataRows()
-    {
-        return Manager.Driver.FindElements(dataRows.Locator);
-    }
-
-    public string GetCurrentPaginatorRange()
-    {
-        throw new NotImplementedException();
     }
 
     public InventoryPage ClearFilter()
@@ -148,7 +143,9 @@ class InventoryPage(DriverManager Manager) : AbstractDemoPage(Manager), ILoadabl
         Manager.Click(clearFilterButton);
         return this;
     }
+    #endregion
 
+    #region Sort Headers
     public InventoryPage ClickSkuHeader()
     {
         Manager.Click(skuHeader);
@@ -190,6 +187,12 @@ class InventoryPage(DriverManager Manager) : AbstractDemoPage(Manager), ILoadabl
         Manager.Click(lastUpdatedHeader);
         return this;
     }
+    #endregion
+
+    public ReadOnlyCollection<IWebElement> GetDataRows()
+    {
+        return Manager.Driver.FindElements(dataRows.Locator);
+    }
 
     public InventoryDetailsPage ClickRow(IWebElement row)
     {
@@ -201,12 +204,17 @@ class InventoryPage(DriverManager Manager) : AbstractDemoPage(Manager), ILoadabl
         throw new NotImplementedException();
     }
 
-    public InventoryDetailsPage ClickEditButton(IWebElement row)
+    public EditInventoryDialog ClickEditButton(IWebElement row)
     {
         throw new NotImplementedException();
     }
 
     public InventoryPage ClickDeleteButton()
+    {
+        throw new NotImplementedException();
+    }
+
+    public string GetNoItemsMessage()
     {
         throw new NotImplementedException();
     }

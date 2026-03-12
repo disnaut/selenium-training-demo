@@ -13,8 +13,67 @@ class InventoryDetailsPage(DriverManager Manager)
 
     public InventoryDetailsPage Load()
     {
+        base.Load();
         throw new NotImplementedException();
     }
 
-    
+    public InventoryDetailsPage ClickInspectionNotesDropdown()
+    {
+        throw new NotImplementedException();
+    }
+
+    public string GetInspectionNotes()
+    {
+        throw new NotImplementedException();
+    }
+
+    public InventoryDetailsPage ClickInventoryHIstoryDropdown()
+    {
+        throw new NotImplementedException();
+    }
+
+    public string GetInventoryHistory()
+    {
+        throw new NotImplementedException();
+    }
+
+    public EditInventoryDialog ClickEditButton()
+    {
+        throw new NotImplementedException();
+    }
+
+    public string GetName()
+    {
+        throw new NotImplementedException();
+    }
+
+    public string GetSKU()
+    {
+        throw new NotImplementedException();
+    }
+
+    public string GetCategory()
+    {
+        throw new NotImplementedException();
+    }
+
+    public string GetQuantity()
+    {
+        throw new NotImplementedException();
+    }
+
+    public string GetLocation()
+    {
+        throw new NotImplementedException();
+    }
+
+    public string GetLastUpdated()
+    {
+        throw new NotImplementedException();
+    }
+
+    public InventoryPage ClickBackToInventory()
+    {
+        throw new NotImplementedException();
+    }
 }
