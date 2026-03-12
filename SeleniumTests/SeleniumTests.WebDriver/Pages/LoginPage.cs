@@ -6,7 +6,7 @@ namespace SeleniumTests.WebDriver.Pages;
 
 class LoginPage(DriverManager Manager) : ILoadable<LoginPage>
 {
-    const string Url = "http://localhost:4200";
+    const string Url = "http://localhost:4200/login";
     private readonly WebElementDetails usernameInput = new(
         By.CssSelector("[data-testid='login-username-input']"),
         "Username Input"
